@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Demandas</title>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AlzaSyDGUqxcBN9FYEyetjpUC41RDYwWo5tVHCQ",
+            authDomain: "sample-efd0e.firebaseapp.com",
+            projectId: "120250140203",
+            storageBucket: "controle-de-demandas-22917.firebasestorage.app",
+            messagingSenderId: "934312808322",
+            appId: "1:934312808322:web:53b3a17b5fd6772ad0c99b",
+            measurementId: "G-CH9QXXK10Q"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        input[type="text"], select, input[type="date"] {
+            padding: 5px;
+            margin: 5px;
+        }
+        .form-container {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <h2>Controle de Demandas</h2>
+    
+    <div class="form-container">
+        <label for="filtro">Filtrar por Status:</label>
+        <select id="filtro" onchange="filtrarDemandas()">
+            <option value="todas">Todas</option>
+            <option value="pendente">Pendentes</option>
+            <option value="concluido">Concluídas</option>
+        </select>
+        
+        <label for="pesquisa">Pesquisar:</label>
+        <input type="text" id="pesquisa" onkeyup="pesquisarDemandas()" placeholder="Digite para buscar...">
+        
+        <label for="pesquisaPedido">Número do Pedido:</label>
+        <input type="text" id="pesquisaPedido" onkeyup="pesquisarPorNumeroPedido()" placeholder="Digite o número do pedido...">
+        <br>
+        <label for="data">Data:</label>
+        <input type="date" id="data" required>
+
+        <label for="numeroPedido">Número do Pedido:</label>
+        <input type="text" id="numeroPedido" required>
+
+        <label for="erro">Erro:</label>
+        <input type="text" id="erro" required>
+
+        <label for="solicitante">Solicitante:</label>
+        <input type="text" id="solicitante" required>
+
+        <button onclick="adicionarDemanda()">Adicionar Demanda</button>
+        <button onclick="baixarExcel()">Baixar Excel</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Número do Pedido</th>
+                <th>Erro</th>
+                <th>Solicitante</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody id="tabelaDemandas">
+        </tbody>
+    </table>
+</body>
+</html>
